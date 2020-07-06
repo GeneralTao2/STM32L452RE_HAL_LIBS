@@ -15,7 +15,7 @@
  */
 
 /* Same microcontroller settings */
-#include "../Src/tools.h"
+#include "../tools/tools.h"
 
 typedef struct IR_ObstacleSN_HandleTypeDef {
 

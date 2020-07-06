@@ -15,7 +15,7 @@
  */
 
 /* Same microcontroller settings */
-#include "../Src/tools.h"
+#include "../tools/tools.h"
 
 /* Allows to use 1 us ((micro second) delays
  * https://github.com/keatis/dwt_delay
