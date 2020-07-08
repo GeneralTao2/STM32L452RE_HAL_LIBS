@@ -21,7 +21,8 @@ void EncoderInit(Encoder_HandleTypeDef *encoder) {
 	encoder->tumbler_CLC_DT_last |=
 			(HAL_GPIO_ReadPin(encoder->DT.GPIO, encoder->CLK.PIN) << 0);
 	encoder->tumbler_TIM_CounterLast = 30000;
-	TIM1->CNT = 30000;
+	encoder->tumblerEncoder_TIM->Instance->CNT = 30000;
+	HAL_TIM_Encoder_Start(encoder->tumblerEncoder_TIM, TIM_CHANNEL_ALL);
 }
 
 /* Reads encoder tumbler pin states and compares
@@ -47,7 +48,8 @@ void EncoderTumblerExternInterrupt(Encoder_HandleTypeDef *encoder) {
  * Should be called in third party timer with frequency ~ 1 kHz
  */
 void EncoderTumblerTimerInterrupt(Encoder_HandleTypeDef *encoder) {
-	uint16_t TIM_Counter = TIM1->CNT;
+	uint16_t TIM_Counter = encoder->tumblerEncoder_TIM->Instance->CNT;
+	//uint16_t TIM_Counter = TIM2->CNT;
 	if(TIM_Counter != encoder->tumbler_TIM_CounterLast) {
 		if(TIM_Counter > encoder->tumbler_TIM_CounterLast) {
 			encoder->tumblerStepCounter += TIM_Counter - encoder->tumbler_TIM_CounterLast;

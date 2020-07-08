@@ -51,6 +51,9 @@ typedef struct Encoder_HandleTypeDef {
 	/* Counter for prevent contact of contacts of button */
 	volatile uint32_t buttonProgTime;
 
+	/* Timer, configured to Encoder Mode */
+	TIM_HandleTypeDef *tumblerEncoder_TIM;
+
 	/* Contains last tumbler pins state, if is used
 	 * EncoderTumblerExternInterrupt. [0,3]
 	 */
