@@ -10,8 +10,17 @@
 
 /*
  * To use HC-SR04 need to do some things in code-generator:
- * 1. Set Output and Inpit GPIO pin to Trigg and Echo respectively;
- * 2. Use high frequency (> 70 MHz) in corresponding periphery.
+ * 1. Set Output GPIO pin for Trigg pin;
+ * 2. Use high frequency (> 70 MHz) in corresponding periphery;
+ * 3. Select timer and set some channel to Input Capture direct mode;
+ * 4. In Parameter Settings set Prescaler to [frequency] / 1 M - 1;
+ * 5. Set counter period to max (in case of 16-bit - 65534);
+ * 6. Polarity Selection should be in Rising Mode;
+ * 7. In NVIC check Capture Compare or Global Interrupt;
+ * 8. Define HCSR04_HandleTypeDef structure and configure needed (!) fields;
+ * 9. Describe somewhere HAL_TIM_IC_CaptureCallback function and contain
+ * 	HCSR04_CaptureCallback into him.
+ * Don't forget to call HCSR04_Init somewhere before main loop.
  */
 
 /* Same microcontroller settings */
@@ -22,24 +31,32 @@
  */
 #include "../dwt_delay/dwt_delay.h"
 
-/* Measurement timeout in us (micro seconds) */
-#define HCSR04_US_TIMEOUT 3000000
-
 /* HCSR04 pin settings */
 typedef struct HCSR04_HandleTypeDef {
-	/* Trigger pin configs */
+	/*! Trigger pin configs */
 	GPIO_PinConfigs trig;
 
-	/* Echo pin configs */
-	GPIO_PinConfigs echo;
+	/*! Input Capture (IC) timer */
+	TIM_HandleTypeDef *htim;
+
+	/*! Input Capture (IC) channel */
+	volatile uint8_t channel;
 
 	/* Contains distance in cm (to an obstacle) */
-	uint32_t distance;
+	volatile uint32_t distance;
+
+	/* Need to indicate begin and end of input pulse */
+	volatile uint8_t isFirstCaptured;
+
+	/* Capture value in pulse beginning */
+	volatile uint32_t IC_firstValue;
 } HCSR04_HandleTypeDef;
 
-uint32_t HCSR04_ReadEchoTime(HCSR04_HandleTypeDef *hcsr04);
+void HCSR04_Init(HCSR04_HandleTypeDef *hcsr);
 
-uint32_t HCSR04_ReadDistance(HCSR04_HandleTypeDef *hcsr04);
+void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr);
+
+void HCSR04_ReadDistance(HCSR04_HandleTypeDef *hcsr);
 
 uint32_t HCSR04_GetDistance(HCSR04_HandleTypeDef *hcsr04);
 
