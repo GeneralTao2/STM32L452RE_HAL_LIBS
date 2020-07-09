@@ -19,10 +19,10 @@
  */
 
 /* Here is some microcontroller settings */
-#include "../Src/tools.h"
+#include "../tools/tools.h"
 
 /* Length of buffer with ADC values */
-#define DMA_ADC_BUF_LEN 4096
+#define DMA_ADC_BUF_LEN 100
 
 /* Buffer with ADC values */
 static volatile uint16_t DMA_ADC_Buf[DMA_ADC_BUF_LEN];
@@ -48,8 +48,6 @@ uint16_t DMA_ADC_Sensor_CalcAverageValue(DMA_ADC_Sensor_HandleTypeDef *channel);
 uint16_t DMA_ADC_Sensor_GetAverageValue(DMA_ADC_Sensor_HandleTypeDef *channel);
 
 uint16_t DMA_ADC_Sensor_GetValue(DMA_ADC_Sensor_HandleTypeDef *channel);
-
-float DMA_ADC_Sensor_GetTemperature(DMA_ADC_Sensor_HandleTypeDef *channel, uint8_t calcAverage);
 
 
 #endif /* LIBS_TEMPERATURE_SENSOR_TEMPERATURE_SENSOR_H_ */
