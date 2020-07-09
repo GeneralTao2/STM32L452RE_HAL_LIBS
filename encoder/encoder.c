@@ -11,7 +11,7 @@
 /* Initialize encoder */
 void EncoderInit(Encoder_HandleTypeDef *encoder) {
 	encoder->buttonState = 0;
-	encoder->tumblerState = 0;
+	encoder->tumblerState = 500;
 	encoder->tumbler_CLC_DT_last = 0;
 	encoder->tumblerStepCounter = 0;
 	encoder->buttonProgTime = HAL_GetTick();

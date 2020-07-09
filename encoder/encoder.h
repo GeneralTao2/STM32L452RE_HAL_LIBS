@@ -35,8 +35,8 @@
 #include "../tools/tools.h"
 
 #define ENCODER_BUTTON_PROGTIME_DELAY 1000
-#define ENCODER_MAX_VAL 10
-#define ENCODER_MIN_VAL -10
+#define ENCODER_MAX_VAL 1000
+#define ENCODER_MIN_VAL 0
 typedef struct Encoder_HandleTypeDef {
 	GPIO_PinConfigs CLK;
 	GPIO_PinConfigs DT;
