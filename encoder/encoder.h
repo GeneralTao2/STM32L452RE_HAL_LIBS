@@ -16,14 +16,16 @@
  * 			1) Set CLK and DT pins to External Interrupt Mode. Pins should be in some interrupt section;
  * 			2) Enable NVIC interrupts for current section;
  * 			3) Set CLK and DT to Rising/Falling edge trigger direction;
- * 			4) Set EncoderButtonExternInterrupt in corresponding external interrupt function;
+ * 			4) Set EncoderTumblerExternInterrupt in corresponding external interrupt function;
  * 		b) If you want to use Encoder Timer;
  * 			1) Select some timer and set Combined Channels to Encoder Mode (be careful for pins, what can be moved);
- * 			2) Set Counter Period to max (in 16-bit case - 65535);
+ * 			2) Set Counter Period to max (in 16-bit case - 65534);
  * 			3) Encoder mode set to TI1;
  * 			4) In GPIO settings set Pull-up to corresponding pins;
- * 			5) Activate another timer and open and set Trigger Event Section to Update Event;
+ * 			5) Activate another timer and Trigger Event Section to Update Event;
  * 			6) Configure this timer Counter Settings to ~ 1 kHz frequency calling;
+ * 				Dont'f forget to call HAL_TIM_Base_Start and HAL_TIM_Base_Start_IT
+ * 				Also activate corresponding NVIC
  * 			7) Set EncoderTumblerTimerInterrupt in this timer interrupt function.
  * *) Set SW pin to External Interrupt Mode;
  * *) Enable NVIC interrupts for current section;
@@ -38,9 +40,15 @@
 #define ENCODER_MAX_VAL 1000
 #define ENCODER_MIN_VAL 0
 typedef struct Encoder_HandleTypeDef {
+	/*! CLK pin configs, if using EXT */
 	GPIO_PinConfigs CLK;
+	/*! DT pin configs, if using EXT */
 	GPIO_PinConfigs DT;
+	/*! SW pin configs */
 	GPIO_PinConfigs SW;
+
+	/*! Timer, configured to Encoder Mode, if using Encoder Timer */
+	TIM_HandleTypeDef *tumblerEncoder_TIM;
 
 	/* Button state 0/1 */
 	volatile uint8_t buttonState;
@@ -50,9 +58,6 @@ typedef struct Encoder_HandleTypeDef {
 
 	/* Counter for prevent contact of contacts of button */
 	volatile uint32_t buttonProgTime;
-
-	/* Timer, configured to Encoder Mode */
-	TIM_HandleTypeDef *tumblerEncoder_TIM;
 
 	/* Contains last tumbler pins state, if is used
 	 * EncoderTumblerExternInterrupt. [0,3]
