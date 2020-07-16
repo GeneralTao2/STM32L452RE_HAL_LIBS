@@ -19,8 +19,11 @@
  * 7. In NVIC check Capture Compare or Global Interrupt;
  * 8. Define HCSR04_HandleTypeDef structure and configure needed (!) fields;
  * 9. Describe somewhere HAL_TIM_IC_CaptureCallback function and contain
- * 	HCSR04_CaptureCallback into him.
+ * 	HCSR04_CaptureCallback(htim, [hcsr]) into him.
  * Don't forget to call HCSR04_Init somewhere before main loop.
+ * To read distance you need firstly call HCSR04_ReadDistance somewhere in main loop.
+ * Take in mind, that HCSR04_ReadDistance is sync function.
+ * VCC should be connected to 5V supply pin.
  */
 
 /* Same microcontroller settings */
@@ -31,9 +34,6 @@
  */
 #include "../dwt_delay/dwt_delay.h"
 
-/* Measurement timeout in us (micro seconds) */
-#define HCSR04_US_TIMEOUT 3000000
-
 /* HCSR04 pin settings */
 typedef struct HCSR04_HandleTypeDef {
 	/*! Trigger pin configs */
@@ -42,7 +42,7 @@ typedef struct HCSR04_HandleTypeDef {
 	/*! Input Capture (IC) timer */
 	TIM_HandleTypeDef *htim;
 
-	/*! Input Capture (IC) channel */
+	/*! Input Capture (IC) channel [TIM_CHANNEL_x] */
 	volatile uint8_t channel;
 
 	/* Contains distance in cm (to an obstacle) */

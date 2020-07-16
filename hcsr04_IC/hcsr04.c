@@ -15,6 +15,7 @@ uint32_t HCSR04_GetDistance(HCSR04_HandleTypeDef *hcsr04) {
 void HCSR04_Init(HCSR04_HandleTypeDef *hcsr) {
 	hcsr->isFirstCaptured = 0;
 	hcsr->distance = 0;
+	DWT_Init();
 }
 
 /* Begins distance reading routine */
