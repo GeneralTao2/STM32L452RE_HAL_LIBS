@@ -28,7 +28,7 @@ void HCSR04_ReadDistance(HCSR04_HandleTypeDef *hcsr) {
 }
 
 /* Calculates and saves in hcsr->distance distance in cm */
-void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr) {
+void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr, void (*callback)(void)) {
 	if(htim != hcsr->htim) {
 		return;
 	}
@@ -71,6 +71,7 @@ void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr)
 				__HAL_TIM_SET_CAPTUREPOLARITY(htim, hcsr->channel, TIM_INPUTCHANNELPOLARITY_RISING);
 
 				HAL_TIM_IC_Stop_IT(hcsr->htim, hcsr->channel);
+				callback();
 			}
 		}
 }

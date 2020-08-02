@@ -57,7 +57,7 @@ typedef struct HCSR04_HandleTypeDef {
 
 void HCSR04_Init(HCSR04_HandleTypeDef *hcsr);
 
-void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr);
+void HCSR04_CaptureCallback(TIM_HandleTypeDef *htim, HCSR04_HandleTypeDef *hcsr, void (*callback)(void));
 
 void HCSR04_ReadDistance(HCSR04_HandleTypeDef *hcsr);
 
