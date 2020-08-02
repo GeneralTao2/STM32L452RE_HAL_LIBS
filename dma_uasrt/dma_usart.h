@@ -23,15 +23,19 @@
 extern UART_HandleTypeDef huart2;
 extern DMA_HandleTypeDef hdma_usart2_tx;
 
-#define DMA_USRT_MESSAGE_LENGTH 64
+#define DMA_USRT_MESSAGE_LENGTH 512
 
 /* Buffer for text storing */
 static uint8_t mes[DMA_USRT_MESSAGE_LENGTH];
 
-void DMA_USART_Print(const char * format, ... );
+void DMA_USART_Printf(const char * format, ... );
+
+void DMA_USART_Print();
 
 void DMA_USART_Init(void);
 
 void DMATransferComplete(DMA_HandleTypeDef *hdma);
+
+uint8_t* DMA_USART_GetBuffer();
 
 #endif /* LIBS_DMA_UASRT_DMA_USART_H_ */

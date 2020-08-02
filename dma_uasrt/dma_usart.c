@@ -7,19 +7,24 @@
 #include "dma_usart.h"
 
 /* Printing text in printf style */
-void DMA_USART_Print(const char * format, ... ) {
-	/* Enabling DMA transmission bit */
-	huart2.Instance->CR3 |= USART_CR3_DMAT;
-
+void DMA_USART_Printf(const char * format, ... ) {
 	/* Custom sprintf implementation */
 	va_list args;
 	va_start(args, format);
 	vsprintf((char*)mes, format, args);
 	va_end(args);
 
+	DMA_USART_Print();
+}
+
+/* Printing already loaded mes */
+void DMA_USART_Print() {
+	/* Enabling DMA transmission bit */
+	huart2.Instance->CR3 |= USART_CR3_DMAT;
+
 	/* Starting USART to DMA transmission interrupt */
 	HAL_DMA_Start_IT(&hdma_usart2_tx, (uint32_t)mes,
-			(uint32_t)&huart2.Instance->TDR, strlen((char*)mes));
+				(uint32_t)&huart2.Instance->TDR, strlen((char*)mes));
 }
 
 /*! Initializing DMA USART */
@@ -30,4 +35,8 @@ void DMA_USART_Init(void) {
 /* Callback function for disabling USART DMA mode */
 void DMATransferComplete(DMA_HandleTypeDef *hdma) {
 	huart2.Instance->CR3 &= ~USART_CR3_DMAT;
+}
+
+uint8_t* DMA_USART_GetBuffer() {
+	return mes;
 }
