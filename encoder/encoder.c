@@ -11,7 +11,7 @@
 /* Initialize encoder */
 void EncoderInit(Encoder_HandleTypeDef *encoder) {
 	encoder->buttonState = 0;
-	encoder->tumblerState = 500;
+	encoder->tumblerState = 1;
 	encoder->tumbler_CLC_DT_last = 0;
 	encoder->tumblerStepCounter = 0;
 	encoder->buttonProgTime = HAL_GetTick();
@@ -21,8 +21,10 @@ void EncoderInit(Encoder_HandleTypeDef *encoder) {
 	encoder->tumbler_CLC_DT_last |=
 			(HAL_GPIO_ReadPin(encoder->DT.GPIO, encoder->CLK.PIN) << 0);
 	encoder->tumbler_TIM_CounterLast = 30000;
-	encoder->tumblerEncoder_TIM->Instance->CNT = 30000;
-	HAL_TIM_Encoder_Start(encoder->tumblerEncoder_TIM, TIM_CHANNEL_ALL);
+	if(encoder->tumblerEncoder_TIM->Instance) {
+		encoder->tumblerEncoder_TIM->Instance->CNT = 30000;
+		HAL_TIM_Encoder_Start(encoder->tumblerEncoder_TIM, TIM_CHANNEL_ALL);
+	}
 }
 
 /* Reads encoder tumbler pin states and compares

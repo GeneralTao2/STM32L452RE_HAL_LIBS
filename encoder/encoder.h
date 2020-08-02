@@ -38,7 +38,7 @@
 
 #define ENCODER_BUTTON_PROGTIME_DELAY 1000
 #define ENCODER_MAX_VAL 1000
-#define ENCODER_MIN_VAL 0
+#define ENCODER_MIN_VAL 1
 typedef struct Encoder_HandleTypeDef {
 	/*! CLK pin configs, if using EXT */
 	GPIO_PinConfigs CLK;
